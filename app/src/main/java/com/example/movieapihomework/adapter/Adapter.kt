@@ -3,23 +3,28 @@ package com.example.movieapihomework.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapihomework.ClickHandler
 import com.example.movieapihomework.R
+import com.example.movieapihomework.api.PopularRe
 import com.example.movieapihomework.databinding.MovieDItemBinding
 import com.example.movieapihomework.databinding.MovieItemBinding
-import com.example.movieapihomework.model.MovieResult
-import com.example.movieapihomework.model.MoviesData
-import com.example.movieapihomework.model.MoviesData2
-import com.example.movieapihomework.model.PopularM
+import com.example.movieapihomework.model.*
+import com.example.movieapihomework.ui.MoviesViewModel
 import com.squareup.picasso.Picasso
 import kotlin.properties.Delegates
 
 class Adapter (
-    private val movieData :MutableList<MoviesData> = mutableListOf()
+    private val movieData :MutableList<MoviesData> = mutableListOf(),
+    private val  clickHandler: (ClickHandler) -> Unit
 ) : RecyclerView.Adapter<Adapter.MovieViewHolder>(){
 
-    var currentAMovie : Int = 0
+    companion object {
+        var currentAMovie: String = ""
+    }
 
     fun updatePopMovies(newPop : List<MoviesData>){
         movieData.clear()
@@ -47,13 +52,15 @@ class Adapter (
 
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
-        holder.bind(movieData[position])
+        holder.bind(movieData[position],clickHandler)
 
 
     class MovieViewHolder(private val binding: MovieItemBinding) : RecyclerView.ViewHolder(binding.root){
         var currentMovie :String? = null
 
-        fun bind(moviesData: MoviesData){
+
+
+        fun bind(moviesData: MoviesData, clickHandler: (ClickHandler) -> Unit){
             binding.title.text = moviesData.title
             binding.date.text = moviesData.date
             binding.pop.text = moviesData.pop.toString()
@@ -65,11 +72,12 @@ class Adapter (
                 .into(binding.poster)
 
             binding.root.setOnClickListener{
-                binding.root.findNavController().navigate(R.id.action_popularFragment_to_detailsFragment)
                 currentMovie = moviesData.id.toString()
-                Adapter().currentAMovie = moviesData.id
+                currentAMovie = moviesData.id.toString()
+                clickHandler(ClickHandler.DetailsClick(moviesData))
+
                 Log.d("Data",moviesData.id.toString() )
-                Log.d("Data",Adapter().currentAMovie.toString() )
+                Log.d("Data",currentAMovie.toString() )
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.example.movieapihomework.api
 
+import android.util.Log
 import com.example.movieapihomework.adapter.Adapter
+import com.example.movieapihomework.adapter.Adapter.Companion.currentAMovie
 import com.example.movieapihomework.databinding.MovieItemBinding
 import com.example.movieapihomework.model.*
 import kotlinx.coroutines.flow.Flow
@@ -74,7 +76,9 @@ class PopularREImpl @Inject constructor (
     override fun getMoivesDeat():Flow<UIState> = flow {
 
         try {
-            val response = popularApi.getMovieDeatils(id = Adapter().currentAMovie.toString())
+            val response = popularApi.getMovieDeatils(id = currentAMovie)
+            Log.d("Data2", currentAMovie)
+            Log.d("Data", response.toString())
             if (response.isSuccessful){
                 response.body()?.let {
                     emit(UIState.SUCCESS3(it.mapToMoivesDeat()))

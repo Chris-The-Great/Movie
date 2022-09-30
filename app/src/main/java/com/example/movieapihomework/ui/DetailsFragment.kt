@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapihomework.adapter.DetailsAdapter
 import com.example.movieapihomework.adapter.NewAdapter
 import com.example.movieapihomework.databinding.FragmentDetailsBinding
+import com.example.movieapihomework.model.MoviesData
+import com.example.movieapihomework.model.MoviesDataDetails
 import com.example.movieapihomework.model.UIState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,7 +55,12 @@ class DetailsFragment : Fragment() {
             }
         }
 
-
+        populateMoivesDeatils(moviesViewModel.deats)
         return binding.root
+    }
+
+    private fun populateMoivesDeatils(deats: MoviesData?) {
+        binding.Title.text = deats?.title
+
     }
 }

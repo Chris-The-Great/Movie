@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapihomework.api.PopularRe
+import com.example.movieapihomework.model.MoviesData
+import com.example.movieapihomework.model.MoviesDataDetails
 import com.example.movieapihomework.model.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,14 +32,13 @@ class MoviesViewModel @Inject constructor(
     private val _dea : MutableLiveData<UIState> = MutableLiveData(UIState.LOADING)
     val dea : LiveData<UIState> get() = _dea
 
-
-
+    var deats: MoviesData? = null
 
     init {
         getPopular()
         getNew()
         getUpcoming()
-        getDeatils()
+        //getDeatils()
     }
 
     private fun getUpcoming() {
@@ -64,11 +65,12 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
-    private fun getDeatils() {
-        viewModelScope.launch(ioDispatcher) {
-            popularRe.getMoivesDeat().collect(){
-                _dea.postValue(it)
+
+        fun getDeatils() {
+            viewModelScope.launch(ioDispatcher) {
+                popularRe.getMoivesDeat().collect() {
+                    _dea.postValue(it)
+                }
             }
         }
-    }
 }

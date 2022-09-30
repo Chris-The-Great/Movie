@@ -1,17 +1,21 @@
 package com.example.movieapihomework.ui
 
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movieapihomework.ClickHandler
+import com.example.movieapihomework.R
 import com.example.movieapihomework.adapter.Adapter
-import com.example.movieapihomework.api.PopularREImpl
-import com.example.movieapihomework.api.PopularRe
 import com.example.movieapihomework.databinding.FragmentPopularBinding
 import com.example.movieapihomework.model.UIState
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +27,18 @@ class PopularFragment() : Fragment() {
         FragmentPopularBinding.inflate(layoutInflater)
     }
     private val adapterV by lazy{
-        Adapter()
+        Adapter {
+            handler ->
+            when (handler) {
+                is ClickHandler.DetailsClick -> {
+                    //Uri.parse("https://api.themoviedb.org/3/movie/${Adapter.currentAMovie}?api_key=b50cae9f28439ad60dd4d456fb2bb7c4&language=en-US")
+                    //Log.d("Data", "https://api.themoviedb.org/3/movie/${Adapter.currentAMovie}?api_key=b50cae9f28439ad60dd4d456fb2bb7c4&language=en-US")
+                    moviesViewModel.getDeatils()
+                    moviesViewModel.deats = handler.moviesData
+                    findNavController().navigate(R.id.action_popularFragment_to_detailsFragment)
+                }
+            }
+        }
     }
     private val moviesViewModel by lazy{
         ViewModelProvider(requireActivity())[MoviesViewModel::class.java]

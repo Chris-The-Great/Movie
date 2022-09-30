@@ -1,17 +1,20 @@
 package com.example.movieapihomework.model
 
 import android.icu.text.CaseMap.Title
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 /**
  * Data class for data needed for popualr movies
  */
+@Parcelize
 data class MoviesData (
     val title :String = "Invalid",
     val poster :String = "Invalid",
     val date : String = "Invalid",
     val pop : Double = 999999.99,
     val id : Int = 999999
-)
+) : Parcelable
 
 /**
  * data class for data needed for new and upcoming movies
@@ -25,7 +28,7 @@ data class MoviesData2(
 /**
  * data class for data needed for details fragment
  */
-
+@Parcelize
 data class MoviesDataDetails(
     val title: String = "Invalid",
     val poster : String = "Invalid",
@@ -33,7 +36,7 @@ data class MoviesDataDetails(
     //val genres : String = "Invalid",
     val duration : Int = 999999,
     //val website : String = "Invalid"
-)
+) : Parcelable
 
 fun List<MovieResult?>?.mapToMoivesData() : List<MoviesData> =
     this?.map {
